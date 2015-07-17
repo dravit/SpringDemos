@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans default-init-method="globalInit" default-destroy-method="cleanUp"> 
+	<!-- If these default init or destroy method is not available in any of the bean than they will just get ignored. If in case any bean is also
+		 providing its init than first global init will be called. In case of destroy first its own destroy will be called and than
+		 global destroy will be called. -->
+	<!-- 
+	There are two scopes of beans : 
+	1. Singleton : Beans are by default singleton and there can be only one object of bean per spring container.
+				   An object of spring container is created when we make a call to new ClassPathXmlApplicationContext("spring.xml")
+				   All the objects for beans in case of singleton get created on creation of spring container.
+	2. Prototype : When scope of bean is prototype than every time a getBean is called or reference is made a new object is created in this case.
+				   To make beans as prototype we need to explicitly define it in scope="prototype"
+	 -->
+	 <!--
+	 Bean definition inheritance : BY this feature we can inherit properties from one bean definition to another bean.
+	 To use it we provide a parent attribute in the child bean definition and give this attribute the id of parent bean.
+	 
+	 If we want to make a bean that just work as parent and it's object should not get created but other bean definitions can use values provided
+	 by that bean than we can set abstract="true" in that bean definition. By default its value is false
+	  -->
+	  <!-- 
+	  We have callback methods in our beans that get runs when bean is created and bean is destroyed. These are generally used to manage bean
+	  life cycles.
+	   -->
+	  
+	<bean id="parentTriangle" class="com.dravit.spring.tutorial7.Triangle" abstract="false">
+		<property name="pointA" ref="point1"></property>
+	</bean>
+	<bean id="triangle" class="com.dravit.spring.tutorial1to6.Triangle">
+		<property name="type" value="Equilateral"></property>		<!-- This is an example of setter injection -->
+		 <!-- This is an example of constructor injection, index (Starts with zero) / type (int , java.lang.String) is used for telling Spring that
+		 which constructor needs to be called. -->
+		<constructor-arg index="0" value="Completed"></constructor-arg>
+		<constructor-arg index="1" value="10"></constructor-arg>
+	</bean>
+	<bean id="triangle7" class="com.dravit.spring.tutorial7.Triangle" parent="parentTriangle">
+		<!--<property name="pointA" ref="point1"></property> commented after adding bean definition inheritance
+		This bean will get value of pointA from parent bean  -->
+		<property name="pointB" ref="point2"></property>
+		<property name="pointC" ref="point3"></property>
+	</bean>
+	<bean id="point1" class="com.dravit.spring.tutorial7.Point">
+		<property name="x" value="0"></property>
+		<property name="y" value="0"></property>
+	</bean>
+	<bean id="point2" class="com.dravit.spring.tutorial7.Point">
+		<property name="x" value="-20"></property>
+		<property name="y" value="0"></property>
+	</bean>
+	<bean id="point3" class="com.dravit.spring.tutorial7.Point">
+		<property name="x" value="0"></property>
+		<property name="y" value="20"></property>
+	</bean>
+	
+	<!-- 
+	Auto-wiring concept:
+		<bean id="triangle7" class="com.dravit.spring.tutorial7.Triangle" autowire="byName">
+			By giving autowire as attribute we can skip the work of manually assigning the parameters for this bean.
+			To do so what we need to do is to give bean name as same as the variable names and than tell to autowire byName.
+			The other value to autowire are : byType, constructor, default(byType), no(default autowire for any bean is no)
+		</bean>
+		<bean id="pointA" class="com.dravit.spring.tutorial7.Point">
+			<property name="x" value="0"></property>
+			<property name="y" value="0"></property>
+		</bean>
+		<bean id="pointB" class="com.dravit.spring.tutorial7.Point">
+			<property name="x" value="-20"></property>
+			<property name="y" value="0"></property>
+		</bean>
+		<bean id="pointC" class="com.dravit.spring.tutorial7.Point">
+			<property name="x" value="0"></property>
+			<property name="y" value="20"></property>
+		</bean>
+	 -->
+	
+	<bean id="parentTriangle9" class="com.dravit.spring.tutorial9.Triangle">
+		<property name="pointList">
+			<list>
+				<ref bean="point1"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="triangle9" class="com.dravit.spring.tutorial9.Triangle" name="traingle9-name" parent="parentTriangle9" init-method="myInit"
+	destroy-method="myDestroy"> 
+	<!-- We can also get a bean by using name in getBean method. -->
+	<!-- Init-method attribute only needs to be defined in case we are providing are own init method. It is recommended to define our own init
+		 method so that our code remains seperate for spring dependent interfaces. Same will be applicable for destroy.
+		 There is an another method to provide init and destroy methods globally, this is done in main beans tag see above-->
+		<property name="pointList">
+			<list merge="true"> <!-- By giving merge true we are telling this list to add its values in the parent list otherwise it will 
+										override the values of parent list. This merge attribute is applicable for all three collections -->
+				<!--<ref bean="point1"/> commented after bean definition inheritance  -->
+				<ref bean="point2"/>
+				<ref bean="point3"/>
+			</list>		
+		</property>
+		<property name="pointMap">
+			<map key-type="java.lang.String" value-type="com.dravit.spring.tutorial7.Point">
+				<entry key="1">
+					<ref bean="point1"/>
+				</entry>
+				<entry key="2">
+					<ref bean="point2"/>
+				</entry>
+				<entry key="3">
+					<ref bean="point3"/>
+				</entry>
+			</map>
+		</property>
+		<property name="pointSet">
+			<set value-type="com.dravit.spring.tutorial7.Point">
+				<ref bean="point1"/>
+				<ref bean="point2"/>
+				<ref bean="point3"/>
+			</set>
+		</property>
+	</bean>
+</beans>
