@@ -8,6 +8,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -17,17 +18,17 @@ import com.dravit.spring.tutorial7.Point;
  * A case when we need to use ApplicationContextAware is:
  * Suppose our main bean(Triangle) is singleton and we want our reference beans(Point beans) to be Prototype
  * i.e we want to set different point object on each call of singleton bean which is not possible from 
- * spring.xml
+ * spring.xml</br>
  * For this purpose we need ApplicationContext here so that we can set new Point objects every time.
- * 
+ * </br></br>
  * BeanNameAware is only is used to get the name of the bean defined in xml.
- * 
- * There are two ways by which we can do some initialization task:
+ * </br></br>
+ * There are two ways by which we can do some initialization task:</br>
  * 1. By implementing InitializingBean interface and implementing its method afterPropertiesSet() , this will be automatically called by spring
- * 	  container.
- * 2. By defining our own init method and telling container in spring.xml that this is our init-method that needs to be run.
+ * 	  container.</br>
+ * 2. By defining our own init method and telling container in spring.xml that this is our init-method that needs to be run.</br>
  * We can use both of initialization methods or only one of them what ever we want. If we are using both than the sequence will be first
- * interface method will get called than our method will get called. Same will work for destroy
+ * interface method will get called than our method will get called. Same will work for destroy.</br>
  */
 public class Triangle implements ApplicationContextAware, BeanNameAware, InitializingBean, DisposableBean{
 	private List<Point> pointList;
@@ -72,7 +73,10 @@ public class Triangle implements ApplicationContextAware, BeanNameAware, Initial
 
 	/**
 	 * @param pointSet the pointSet to set
+	 * Required annotation will make sure at time when bean get initialized that this value must be provided to avoid Exception at
+	 * Runtime
 	 */
+	@Required
 	public void setPointSet(Set<Point> pointSet) {
 		this.pointSet = pointSet;
 	}

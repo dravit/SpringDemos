@@ -4,6 +4,9 @@
  */
 package com.dravit.spring.tutorial7;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 public class Triangle {
 	private Point pointA;
 	private Point pointB;
@@ -41,6 +44,8 @@ public class Triangle {
 	/**
 	 * @param pointC the pointC to set
 	 */
+	@Autowired
+	@Qualifier("qualifierRelated")
 	public void setPointC(Point pointC) {
 		this.pointC = pointC;
 	}
