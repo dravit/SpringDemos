@@ -1,0 +1,174 @@
+Spring is an open source framework that 
+	- Addresses the complexity of enterprise application development
+	- Provides simplicity and loose coupling.
+	
+Key feature stack
+	- Lightweight
+	- Dependency Injection
+	- Aspect Oriented
+	- Container
+	- Framework
+	
+Spring is non-intrusive: objects in a Spring-enabled application often have no dependencies on Spring-specific classes
+
+Spring promotes loose coupling through a technique known as dependency injection (DI). When DI is applied, objects are passively given their dependencies 
+	instead of creating or looking for dependent objects for themselves. You can think of DI as JNDI in reverse—instead of an object looking up dependencies 
+	from a container, the container gives the dependencies to the object at instantiation without waiting to be asked.
+
+Dependency Injection - A mechanism to load pre-known object object dependencies before starting the application. Unfortunately traditional programming language do not have this
+	capability. To apply DI objects can obtain their dependency at creation time by some external entity(DI container) that coordinates each object in the system.
+	
+DI is at the heart of the Spring Framework. Originally, dependency injection was commonly referred to by another name called Inversion Of Control(IOC).
+
+Traditionally, each object is responsible for obtaining its own references to the objects it collaborates with (its dependencies). This can lead to highly coupled and hard-to-test code.
+	
+	
+Spring framework comes up with a DI container which loads pre-known dependencies of an object at object creation. An object, for which dependency injection is required, 
+	is mapped with a bean in a Spring configuration file. All the dependencies are defined in the configuration file.
+	
+To avail the benefits of Spring DI, a bean is created by the Spring container in place of creating the object with the new operator.
+	
+In Spring, objects are not responsible for finding or creating the other objects that they need to do their job. 
+	Instead, they are given references to the objects  that they collaborate with by the container.
+	
+The act of creating these associations between application objects is the essence of dependency injection (DI) and is commonly referred to as wiring of objects.
+
+The spring container is at the core of the Spring Framework.
+
+Spring’s container uses dependency injection (DI) to manage the components that make up an application. 
+This includes creating associations between collaborating components. As such, these objects are cleaner and easier to understand, support reuse, and are easy to unit-test
+
+Container comes with two main types of interfaces
+
+	- org.springframework.beans.factory.BeanFactory and org.springframework.context. ApplicationContext
+
+BeanFactory is responsible for the life cycle of bean, i.e creation and disposal of bean.
+
+ApplicationContext is the sub class of bean factory, it provides the additional functionalities such as the ability to resolve textual messages from a 
+	properties file and the ability to publish application events to interested event listeners
+
+Bean Factory is the  implementation of the factory design pattern, which  is responsible for creating and disposable of beans. 
+	When we create an instance of bean factory, Spring container is loaded to serve its facilities.
+
+A bean factory also takes part in the life cycle of a bean, making calls to custom initialization and destruction methods, if those methods are defined.
+
+Beans are “lazily” loaded into bean factories, meaning that while the bean factory will immediately load the bean definitions, the beans themselves will not 
+	be instantiated until they are needed.
+When getBean() is called on the bean factory, the factory instantiates the bean and set the bean’s properties using DI.
+
+Resource is only an interface, while ClassPathResource is one of its implementations for loading a resource from the class path. Other implementations of the 
+	Resource interface, such as  FileSystemResource, InputStreamResource, and UrlResource, are used to load a resource from other locations
+
+Next, you can use the following statement to instantiate a bean factory by passing in a Resource object with the configuration file loaded:
+	BeanFactory factory = new XmlBeanFactory(resource);
+
+Application contexts provide a means for resolving text messages, including support for internationalization (I18N) of those messages.
+
+Application contexts provide a generic way to load file resources, such as images
+
+Application contexts can publish events to beans that are registered as listeners.
+
+Because of the additional functionality it provides, an ApplicationContext is preferred over a BeanFactory in nearly all applications. 
+
+The only times you might consider using a BeanFactory are in circumstances where resources are scarce, such as a mobile device.
+
+Among the many implementations of ApplicationContext are three that are commonly used:
+	
+	- ClassPathXmlApplicationContext — Loads a context definition from an XML file located in the class path, treating context definition files as class path resources.
+ 	
+ 	- FileSystemXmlApplicationContext — Loads a context definition from an XML file in the file system.
+	
+	- XmlWebApplicationContext — Loads context definitions from an XML file contained within a web application.
+	
+The ClassPathXmlApplicationContext implementation builds an application context by loading an XML configuration file from the class path.
+	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+
+Types of Injection in Spring :
+	
+	Setter based injection - realized by calling setters on your beans. Provide setter methods for each property. Use <property> tag in xml to configure value.
+	
+	Constructor based injection - realized by invoking a constructor with a number of arguments. Write constructor with the properties as arguments. 
+			Use <constructor-arg> tag in xml to configure value.
+	
+	Factory method - Objects are injected from the factory method.
+	
+One bean could be referenced from the other bean. The act of creating these associations between applications is called wiring.
+
+By default, all the properties with @Autowired are required. If a dependency is not found, an exception is thrown. This is good in some circumstance 
+	when you want to ensure that all dependent objects have provided their dependencies.
+	
+If you want a certain property to be optional, you will have to set the required attribute of @Autowired(required=false) annotation to false.
+
+In addition to the setter method, the @Autowired annotation can also be applied to a constructor. Then Spring will attempt to find a bean with the compatible 
+	type for each of the constructor arguments.
+
+The @Autowired annotation can also be applied to a field, even if it is not declared as public. In this way, you can omit the need of declaring a setter 
+	method or a constructor for this field.
+	
+If you want to auto-wire bean properties by name, you can annotate a setter method, a constructor, or a field with the JSR-250 @Resource annotation. 
+	By default, Spring will attempt to find a bean with the same name as this property and if you want to change name by which it will find you can specify by
+	@javax.annotation.Resource	==>> This one is default
+	@javax.annotation.Resource(name="some bean name here")	==>> This one will map with the mentioned bean name.
+
+Automatic Discovering Beans : 
+	
+	Some of the beans in your application can have a default state on creation. If this is the requirement, we can omit the <bean> tag in configuration file.
+	
+	The <context:component-scan> element does everything that <context:annotation-config> does, plus it configures Spring to automatically discover beans and declare them for you.
+	
+	The <context:component-scan> element works by scanning a package and all of its sub-packages, looking for classes that could be automatically registered as beans in the Spring container. 
+		The base-package attribute tells <context:component-scan> the package to start its scan from.
+		E.g:
+		<context:component-scan base-package="name of base package" />
+		
+By default, <context:component-scan> looks for classes that are annotated with one of a handful of special stereotype annotations: 
+	@Component—A general-purpose stereotype annotation indicating that the class is a Spring component
+	@Controller—Indicates that the class defines a Spring MVC controller
+	@Repository—Indicates that the class defines a data repository
+	@Service—Indicates that the class defines a service
+	Any custom annotation that is itself annotated with @Component  
+	
+By default, the bean’s ID will be generated by camel-casing the class name. A bean with name mySQLDB is generated for the MySQLDB class.
+	If you want to change the name of the bean, you can annotate your bean class as follows: 
+		@Component(name="new bean name")
+		public class MySQL {...}
+		
+Bean scoping :
+	
+	By default, all Spring beans are singletons. That means it will always hand out the exact same instance of the bean when asked for.
+	We can change the scope of the bean among below given scope:
+	
+		- Singleton 	: Creates a single bean instance per single IOC container
+		- prototype 	: creates a new bean instance each time when requested
+		- request		: creates a single bean instance per http request; only valid in context of web application
+		- session		: creates a single bean instance per http session; only valid in context of web application
+		- globalSession	: creates a single bean instance per global http session; only valid in context of portal application.
+		
+If a parent bean is singleton and child bean is prototype and two different calls are made for parent bean than only one instance of parent bean is created and one instance of child
+	bean is created and again that same instance will be returned even in case of different child object.
+	
+Scope can be defined using annotations	:
+
+	@Scope(BeanDefinition.SCOPE_PROTOTYPE)
+	
+Lazy Initialization	:
+	By default, Spring create all the singleton scoped beans on startup. This behavior can be changed to lazy initialization – load the on demand.
+		lazy-init="true"
+	
+	@Lazy Annotation
+		If present and set to true, the @Bean or @Component will not be initialized until referenced by another bean or explicitly retrieved from the enclosing BeanFactory.
+		If Lazy is present on a @Configuration class, this indicates that all @Bean methods within that @Configuration should be lazily initialized
+	
+	
+
+
+	
+	
+	 
+	 
+	
+
+
+
+ 
+	
