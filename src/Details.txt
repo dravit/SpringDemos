@@ -15,12 +15,14 @@ Spring promotes loose coupling through a technique known as dependency injection
 	instead of creating or looking for dependent objects for themselves. You can think of DI as JNDI in reverse—instead of an object looking up dependencies 
 	from a container, the container gives the dependencies to the object at instantiation without waiting to be asked.
 
-Dependency Injection - A mechanism to load pre-known object object dependencies before starting the application. Unfortunately traditional programming language do not have this
-	capability. To apply DI objects can obtain their dependency at creation time by some external entity(DI container) that coordinates each object in the system.
+Dependency Injection - A mechanism to load pre-known object object dependencies before starting the application is known as dependency injection.
+    Unfortunately traditional programming language do not have this	capability.
+    To apply DI objects can obtain their dependency at creation time by some external entity(DI container) that coordinates each object in the system.
 	
 DI is at the heart of the Spring Framework. Originally, dependency injection was commonly referred to by another name called Inversion Of Control(IOC).
 
-Traditionally, each object is responsible for obtaining its own references to the objects it collaborates with (its dependencies). This can lead to highly coupled and hard-to-test code.
+Traditionally, each object is responsible for obtaining its own references to the objects it collaborates with (its dependencies).
+This can lead to highly coupled and hard-to-test code.
 	
 	
 Spring framework comes up with a DI container which loads pre-known dependencies of an object at object creation. An object, for which dependency injection is required, 
@@ -36,18 +38,28 @@ The act of creating these associations between application objects is the essenc
 The spring container is at the core of the Spring Framework.
 
 Spring’s container uses dependency injection (DI) to manage the components that make up an application. 
-This includes creating associations between collaborating components. As such, these objects are cleaner and easier to understand, support reuse, and are easy to unit-test
+This includes creating associations between collaborating components. As such, these objects are cleaner and easier to
+understand, support reuse, and are easy to unit-test
 
 Container comes with two main types of interfaces
 
-	- org.springframework.beans.factory.BeanFactory and org.springframework.context. ApplicationContext
+	- org.springframework.beans.factory.BeanFactory
+	- org.springframework.context. ApplicationContext
+
+> Difference between BeanFactory and ApplicationContext:
 
 BeanFactory is responsible for the life cycle of bean, i.e creation and disposal of bean.
 
-ApplicationContext is the sub class of bean factory, it provides the additional functionalities such as the ability to resolve textual messages from a 
-	properties file and the ability to publish application events to interested event listeners
+ApplicationContext is the sub class of bean factory, it provides the additional functionality such as
+    - the ability to resolve textual messages from a properties file, including support for internationalization of those messages
+    - the ability to publish application events to beans that are registered as event listeners
+    - Provide generic way to load file resource, such as images
 
-Bean Factory is the  implementation of the factory design pattern, which  is responsible for creating and disposable of beans. 
+Because of additional functionality, ApplicationContext is preferred over BeanFactory in most of the application.
+BeanFactory are used in circumstance where resources are scare, like mobile devices.
+
+Bean Factory is the  implementation of the factory design pattern.
+    It is a heavy weight object, which  is responsible for creating and disposable of beans.
 	When we create an instance of bean factory, Spring container is loaded to serve its facilities.
 
 A bean factory also takes part in the life cycle of a bean, making calls to custom initialization and destruction methods, if those methods are defined.
@@ -62,16 +74,6 @@ Resource is only an interface, while ClassPathResource is one of its implementat
 Next, you can use the following statement to instantiate a bean factory by passing in a Resource object with the configuration file loaded:
 	BeanFactory factory = new XmlBeanFactory(resource);
 
-Application contexts provide a means for resolving text messages, including support for internationalization (I18N) of those messages.
-
-Application contexts provide a generic way to load file resources, such as images
-
-Application contexts can publish events to beans that are registered as listeners.
-
-Because of the additional functionality it provides, an ApplicationContext is preferred over a BeanFactory in nearly all applications. 
-
-The only times you might consider using a BeanFactory are in circumstances where resources are scarce, such as a mobile device.
-
 Among the many implementations of ApplicationContext are three that are commonly used:
 	
 	- ClassPathXmlApplicationContext — Loads a context definition from an XML file located in the class path, treating context definition files as class path resources.
@@ -83,21 +85,83 @@ Among the many implementations of ApplicationContext are three that are commonly
 The ClassPathXmlApplicationContext implementation builds an application context by loading an XML configuration file from the class path.
 	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
 
+Multiple configuration files can be added either by importing them in one configuration file or by using an overloaded constructor of ClassPathXmlApplicationContext.
+    ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"bean1.xml", "bean2.xml"});
+
+
+Bean LifeCycle:
+
+    Instantiate {Bean Instance creation} >
+    Populate Properties {Fill Dependencies} >
+    BeanNameAware's setBeanName() {If bean implements BeanNameAware, Spring passes the bean name to setBeanName()}   >
+    BeanFactoryAware's setBeanFactory() {If bean implemments BeanFactoryAware, Spring passes the bean factory to setBeanFactory()}  >
+    ApplicationContextAware's   setApplicationContext() {If bean implements ApplicationContextAware, Spring passes the application context to setApplicationContext()}  >
+    Pre-initialization BeanPostProcessors   >
+    Initializing Bean's afterPropertiesSet() {If bean implements InitializingBean, its afterPropertiesSet() methid is called}   >
+    Call custom init-method {If custom init method is defined in the configuration file init-method is called}  >
+    Post-initialization BeanPostProcessors  >
+
+                                                                            Bean is ready to use now
+                                                                    ---------------------------------------
+                                                                        After use and Container Shutdown
+
+    Disposable Bean's destroy() {If bean implements DisposableBean it's destroy() method is called}     >
+    Call custom destroy method {If a custom destroy method is defined in configuration file, destroy-method is called}.
+
+
+
+
 Types of Injection in Spring :
 	
 	Setter based injection - realized by calling setters on your beans. Provide setter methods for each property. Use <property> tag in xml to configure value.
 	
 	Constructor based injection - realized by invoking a constructor with a number of arguments. Write constructor with the properties as arguments. 
-			Use <constructor-arg> tag in xml to configure value.
+		Use <constructor-arg> tag in xml to configure value.
 	
 	Factory method - Objects are injected from the factory method.
 	
 One bean could be referenced from the other bean. The act of creating these associations between applications is called wiring.
 
-By default, all the properties with @Autowired are required. If a dependency is not found, an exception is thrown. This is good in some circumstance 
+To configure auto wiring by annotation, you need to add a bean post processor {AutoWiredAnnotationBeanPostProcessor}.
+
+If you are using Application Context in place of bean factory, you need to add below line in your configuration file:
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+
+Alternatively, you can simply include the <context:annotation-config> element in your bean configuration file,
+    and an AutowiredAnnotationBeanPostProcessor instance will automatically get registered.
+
+
+By default, all the properties with @Autowired are required. If a dependency is not found,
+    an exception{org.springframework.beans.factory.UnsatisfiedDependencyException} is thrown. This is good in some circumstance
 	when you want to ensure that all dependent objects have provided their dependencies.
-	
+
+Making autowiring error safe using required=false :
+
 If you want a certain property to be optional, you will have to set the required attribute of @Autowired(required=false) annotation to false.
+If you want to apply optional autowiring at global level i.e. for all properties in all beans; use below configuration setting.
+<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor">
+    <property name="requiredParameterValue" value="false" />
+</bean>
+
+Excluding a bean from being available for autowiring :
+
+    By default, autowiring scan and matches all bean definitions in scope.
+    If you want to exclude some bean definitions so that they can not be injected through autowiring mode,
+    you can do this using ‘autowire-candidate’ set to false.
+
+    -   Using ‘autowire-candidate‘ as false totally exclude a bean from being an autowire candidate.
+        <bean id="finance"      class="DepartmentBean" autowire-candidate="false">
+                <property name="name" value="Finance" />
+        </bean>
+
+    - Another option is to limit autowire candidates based on pattern-matching against bean names.
+        The top-level element accepts one or more patterns within its ‘default-autowire-candidates‘ attribute.
+        For example, to limit autowire candidate status to any bean whose name ends with ‘Impl’, provide a value of ‘*Impl’.
+        To provide multiple patterns, define them in a comma-separated list.
+        <beans default-autowire-candidates="*Impl,*Dao">
+
+    Note that an explicit value of ‘true’ or ‘false’ for a bean definition’s ‘autowire-candidate’ attribute always takes
+    precedence, and for such beans, the pattern matching rules will not apply.
 
 In addition to the setter method, the @Autowired annotation can also be applied to a constructor. Then Spring will attempt to find a bean with the compatible 
 	type for each of the constructor arguments.
@@ -110,13 +174,18 @@ If you want to auto-wire bean properties by name, you can annotate a setter meth
 	@javax.annotation.Resource	==>> This one is default
 	@javax.annotation.Resource(name="some bean name here")	==>> This one will map with the mentioned bean name.
 
+Wiring hardcoded values using @Value
+    @Value("India")
+    private String country;
+
 Automatic Discovering Beans : 
 	
 	Some of the beans in your application can have a default state on creation. If this is the requirement, we can omit the <bean> tag in configuration file.
 	
 	The <context:component-scan> element does everything that <context:annotation-config> does, plus it configures Spring to automatically discover beans and declare them for you.
 	
-	The <context:component-scan> element works by scanning a package and all of its sub-packages, looking for classes that could be automatically registered as beans in the Spring container. 
+	The <context:component-scan> element works by scanning a package and all of its sub-packages, looking for classes that
+	could be automatically registered as beans in the Spring container.
 		The base-package attribute tells <context:component-scan> the package to start its scan from.
 		E.g:
 		<context:component-scan base-package="name of base package" />
@@ -161,9 +230,14 @@ Lazy Initialization	:
 	
 Q. How to resolve circular dependency between beans in Spring IoC?
 A. This is from Spring Reference
-   "You can generally trust Spring to do the right thing. It detects configuration problems, such as references to non		    -existent beans and circular dependencies, at container load-time. Spring sets properties and resolves dependencies as      late as possible, when the bean is actually created.
+   "You can generally trust Spring to do the right thing. It detects configuration problems, such as references to
+   non-existent beans and circular dependencies, at container load-time.
+   Spring sets properties and resolves dependencies as late as possible, when the bean is actually created.
     So it instantiates both beans and injects them onto each other."
-"BeanCurrentlyInCreationException" mostly arose due to constructor injection. If that is the case mostly using setter injection instead of constructor injection will solve the issue. Constructor injection typically gives rise to the chicken-egg problem!
+
+    "BeanCurrentlyInCreationException" mostly arose due to constructor injection. If that is the case mostly using setter
+    injection instead of constructor injection will solve the issue. Constructor injection typically gives rise to the chicken-egg problem!
+
 http://stackoverflow.com/questions/3485347/circular-dependency-in-spring
 http://stackoverflow.com/questions/25997512/how-to-resolve-circular-dependency-between-beans-in-spring-ioc
 
