@@ -241,7 +241,11 @@ A. This is from Spring Reference
 http://stackoverflow.com/questions/3485347/circular-dependency-in-spring
 http://stackoverflow.com/questions/25997512/how-to-resolve-circular-dependency-between-beans-in-spring-ioc
 
+Q. Can we create a Spring bean even if the constructor is private?
+A. Yes, spring can create bean even if constructor is private. It can call that constructor using Reflection.
 
+Q. What will happen if we have duplicate bean Id's in same spring context? Will Spring throw an Error or Exception?
+A. No Spring will not throw any exception in this case. It will override the previous one with new one.
 	
 	
 	 
