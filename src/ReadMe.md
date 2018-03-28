@@ -56,38 +56,30 @@ This can lead to highly coupled and hard-to-test code.
 - **ClassPathXmlApplicationContext** — Loads a context definition from an XML file located in the class path, treating context definition files as class path resources. E.g `ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");`
 - **FileSystemXmlApplicationContext** — Loads a context definition from an XML file in the file system.
 - **XmlWebApplicationContext** — Loads context definitions from an XML file contained within a web application.
-	
 - Multiple configuration files can be added either by importing them in one configuration file or by using an overloaded constructor of ClassPathXmlApplicationContext.
     `ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"bean1.xml", "bean2.xml"});`
 
+#### Bean LifeCycle:
+- Instantiate {Bean Instance creation}
+- Populate Properties {Fill Dependencies}
+- BeanNameAware's setBeanName() {If bean implements BeanNameAware, Spring passes the bean name to setBeanName()}
+- BeanFactoryAware's setBeanFactory() {If bean implemments BeanFactoryAware, Spring passes the bean factory to setBeanFactory()}
+- ApplicationContextAware's   setApplicationContext() {If bean implements ApplicationContextAware, Spring passes the application context to setApplicationContext()}
+- Pre-initialization BeanPostProcessors
+- Initializing Bean's afterPropertiesSet() {If bean implements InitializingBean, its afterPropertiesSet() methid is called}
+- Call custom init-method {If custom init method is defined in the configuration file init-method is called}
+- Post-initialization BeanPostProcessors
 
-Bean LifeCycle:
+						Bean is ready to use now
+					---------------------------------------
+						After use and Container Shutdown
 
-    Instantiate {Bean Instance creation} >
-    Populate Properties {Fill Dependencies} >
-    BeanNameAware's setBeanName() {If bean implements BeanNameAware, Spring passes the bean name to setBeanName()}   >
-    BeanFactoryAware's setBeanFactory() {If bean implemments BeanFactoryAware, Spring passes the bean factory to setBeanFactory()}  >
-    ApplicationContextAware's   setApplicationContext() {If bean implements ApplicationContextAware, Spring passes the application context to setApplicationContext()}  >
-    Pre-initialization BeanPostProcessors   >
-    Initializing Bean's afterPropertiesSet() {If bean implements InitializingBean, its afterPropertiesSet() methid is called}   >
-    Call custom init-method {If custom init method is defined in the configuration file init-method is called}  >
-    Post-initialization BeanPostProcessors  >
+- Disposable Bean's destroy() {If bean implements DisposableBean it's destroy() method is called}     >
+- Call custom destroy method {If a custom destroy method is defined in configuration file, destroy-method is called}.
 
-                                                                            Bean is ready to use now
-                                                                    ---------------------------------------
-                                                                        After use and Container Shutdown
-
-    Disposable Bean's destroy() {If bean implements DisposableBean it's destroy() method is called}     >
-    Call custom destroy method {If a custom destroy method is defined in configuration file, destroy-method is called}.
-
-
-
-
-Types of Injection in Spring :
-	
-	Setter based injection - realized by calling setters on your beans. Provide setter methods for each property. Use <property> tag in xml to configure value.
-	
-	Constructor based injection - realized by invoking a constructor with a number of arguments. Write constructor with the properties as arguments. 
+#### Spring Injections : 
+- **Setter based injection** - realized by calling setters on your beans. Provide setter methods for each property. Use <property> tag in xml to configure value.
+- **Constructor based injection** - realized by invoking a constructor with a number of arguments. Write constructor with the properties as arguments. 
 		Use <constructor-arg> tag in xml to configure value.
 	
 	Factory method - Objects are injected from the factory method.
