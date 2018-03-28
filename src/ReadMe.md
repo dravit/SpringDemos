@@ -78,14 +78,10 @@ This can lead to highly coupled and hard-to-test code.
 - Call custom destroy method {If a custom destroy method is defined in configuration file, destroy-method is called}.
 
 #### Spring Injections : 
-- **Setter based injection** - realized by calling setters on your beans. Provide setter methods for each property. Use <property> tag in xml to configure value.
-- **Constructor based injection** - realized by invoking a constructor with a number of arguments. Write constructor with the properties as arguments. 
-		Use <constructor-arg> tag in xml to configure value.
+- **Setter based injection** : realized by calling setters on your beans. Provide setter methods for each property. Use <property> tag in xml to configure value.
+- **Constructor based injection** : realized by invoking a constructor with a number of arguments. Write constructor with the properties as arguments. Use <constructor-arg> tag in xml to configure value.
+- **Factory method** : Objects are injected from the factory method.
 	
-	Factory method - Objects are injected from the factory method.
-	
-One bean could be referenced from the other bean. The act of creating these associations between applications is called wiring.
-
 To configure auto wiring by annotation, you need to add a bean post processor {AutoWiredAnnotationBeanPostProcessor}.
 
 If you are using Application Context in place of bean factory, you need to add below line in your configuration file:
