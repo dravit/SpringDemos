@@ -1,48 +1,35 @@
-Spring is an open source framework that 
-	- Addresses the complexity of enterprise application development
-	- Provides simplicity and loose coupling.
+**Spring is an open source framework that :**
+- Addresses the complexity of enterprise application development
+- Provides simplicity and loose coupling.
 	
-Key feature stack
-	- Lightweight
-	- Dependency Injection
-	- Aspect Oriented
-	- Container
-	- Framework
+**Key feature stack :**
+- Lightweight
+- Dependency Injection
+- Aspect Oriented
+- Container
+- Framework
 	
-Spring is non-intrusive: objects in a Spring-enabled application often have no dependencies on Spring-specific classes
+**Spring is non-intrusive** : objects in a Spring-enabled application often have no dependencies on Spring-specific classes
 
-Spring promotes loose coupling through a technique known as dependency injection (DI). When DI is applied, objects are passively given their dependencies 
-	instead of creating or looking for dependent objects for themselves. You can think of DI as JNDI in reverse—instead of an object looking up dependencies 
-	from a container, the container gives the dependencies to the object at instantiation without waiting to be asked.
-
-Dependency Injection - A mechanism to load pre-known object object dependencies before starting the application is known as dependency injection.
-    Unfortunately traditional programming language do not have this	capability.
-    To apply DI objects can obtain their dependency at creation time by some external entity(DI container) that coordinates each object in the system.
-	
-DI is at the heart of the Spring Framework. Originally, dependency injection was commonly referred to by another name called Inversion Of Control(IOC).
-
-Traditionally, each object is responsible for obtaining its own references to the objects it collaborates with (its dependencies).
+#### Dependency Injection 
+- A mechanism to load pre-known object object dependencies before starting the application is known as dependency injection.
+- Unfortunately traditional programming language do not have this capability.
+- To apply DI objects can obtain their dependency at creation time by some external entity(DI container) that coordinates each object in the system.
+- Spring promotes **loose coupling** through a technique known as **dependency injection (DI)**. 
+- When DI is applied, objects are passively given their dependencies instead of creating or looking for dependent objects for themselves. 
+- You can think of DI as JNDI in reverse—instead of an object looking up dependencies from a container, the container gives the dependencies to the object at instantiation without waiting to be asked.
+- DI is at the heart of the Spring Framework. Originally, dependency injection was commonly referred to by another name called Inversion Of Control(IOC).
+- Traditionally, each object is responsible for obtaining its own references to the objects it collaborates with (its dependencies).
 This can lead to highly coupled and hard-to-test code.
-	
-	
-Spring framework comes up with a DI container which loads pre-known dependencies of an object at object creation. An object, for which dependency injection is required, 
-	is mapped with a bean in a Spring configuration file. All the dependencies are defined in the configuration file.
-	
-To avail the benefits of Spring DI, a bean is created by the Spring container in place of creating the object with the new operator.
-	
-In Spring, objects are not responsible for finding or creating the other objects that they need to do their job. 
-	Instead, they are given references to the objects  that they collaborate with by the container.
-	
-The act of creating these associations between application objects is the essence of dependency injection (DI) and is commonly referred to as wiring of objects.
+- Spring framework comes up with a DI container which loads pre-known dependencies of an object at object creation. An object, for which dependency injection is required, is mapped with a bean in a Spring configuration file. All the dependencies are defined in the configuration file.
+- To avail the benefits of Spring DI, a bean is created by the Spring container in place of creating the object with the new operator.
+- The act of creating these associations between application objects is the essence of dependency injection (DI) and is commonly referred to as wiring of objects.
 
-The spring container is at the core of the Spring Framework.
-
-Spring’s container uses dependency injection (DI) to manage the components that make up an application. 
-This includes creating associations between collaborating components. As such, these objects are cleaner and easier to
-understand, support reuse, and are easy to unit-test
-
-Container comes with two main types of interfaces
-
+#### Spring Container
+- The spring container is at the core of the Spring Framework.
+- Spring’s container uses dependency injection (DI) to manage the components that make up an application. 
+- This includes creating associations between collaborating components. As such, these objects are cleaner and easier to understand, support reuse, and are easy to unit-test
+- Container comes with two main types of interfaces
 	- org.springframework.beans.factory.BeanFactory
 	- org.springframework.context. ApplicationContext
 
