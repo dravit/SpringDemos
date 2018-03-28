@@ -11,16 +11,14 @@
 	
 **Spring is non-intrusive** : objects in a Spring-enabled application often have no dependencies on Spring-specific classes
 
-#### Dependency Injection 
+#### Dependency Injection or Inversion Of Control(IOC)
 - A mechanism to load pre-known object object dependencies before starting the application is known as dependency injection.
-- Unfortunately traditional programming language do not have this capability.
+- Traditionally, each object is responsible for obtaining its own references to the objects it collaborates with (its dependencies).
+This can lead to highly coupled and hard-to-test code.
 - To apply DI objects can obtain their dependency at creation time by some external entity(DI container) that coordinates each object in the system.
 - Spring promotes **loose coupling** through a technique known as **dependency injection (DI)**. 
 - When DI is applied, objects are passively given their dependencies instead of creating or looking for dependent objects for themselves. 
 - You can think of DI as JNDI in reverse—instead of an object looking up dependencies from a container, the container gives the dependencies to the object at instantiation without waiting to be asked.
-- DI is at the heart of the Spring Framework. Originally, dependency injection was commonly referred to by another name called Inversion Of Control(IOC).
-- Traditionally, each object is responsible for obtaining its own references to the objects it collaborates with (its dependencies).
-This can lead to highly coupled and hard-to-test code.
 - Spring framework comes up with a DI container which loads pre-known dependencies of an object at object creation. An object, for which dependency injection is required, is mapped with a bean in a Spring configuration file. All the dependencies are defined in the configuration file.
 - To avail the benefits of Spring DI, a bean is created by the Spring container in place of creating the object with the new operator.
 - The act of creating these associations between application objects is the essence of dependency injection (DI) and is commonly referred to as wiring of objects.
@@ -33,47 +31,34 @@ This can lead to highly coupled and hard-to-test code.
 	- org.springframework.beans.factory.BeanFactory
 	- org.springframework.context. ApplicationContext
 
-> Difference between BeanFactory and ApplicationContext:
-
-BeanFactory is responsible for the life cycle of bean, i.e creation and disposal of bean.
-
-ApplicationContext is the sub class of bean factory, it provides the additional functionality such as
+> **_Difference between BeanFactory and ApplicationContext:_**
+> - **BeanFactory** is responsible for the life cycle of bean, i.e creation and disposal of bean. Can be instantiated as `BeanFactory factory = new XmlBeanFactory(resource);`
+> - **ApplicationContext** is the sub class of bean factory, it provides the additional functionality such as : 
     - the ability to resolve textual messages from a properties file, including support for internationalization of those messages
     - the ability to publish application events to beans that are registered as event listeners
     - Provide generic way to load file resource, such as images
+- Because of additional functionality, ApplicationContext is preferred over BeanFactory in most of the application.
+- BeanFactory are used in circumstance where resources are scare, like mobile devices.
+- Bean Factory is the  implementation of the factory design pattern.
+- It is a heavy weight object, which  is responsible for creating and disposable of beans.
+- When we create an instance of bean factory, Spring container is loaded to serve its facilities.
+- Bean factory also takes part in the life cycle of a bean, making calls to custom initialization and destruction methods, if those methods are defined.
 
-Because of additional functionality, ApplicationContext is preferred over BeanFactory in most of the application.
-BeanFactory are used in circumstance where resources are scare, like mobile devices.
+- **Beans are “lazily” loaded into bean factories**, meaning that while the bean factory will immediately load the bean definitions, the beans themselves will not be instantiated until they are needed.
+- When getBean() is called on the bean factory, the factory instantiates the bean and set the bean’s properties using DI.
 
-Bean Factory is the  implementation of the factory design pattern.
-    It is a heavy weight object, which  is responsible for creating and disposable of beans.
-	When we create an instance of bean factory, Spring container is loaded to serve its facilities.
+#### Resource
+- Resource is only an interface. It's implementations are ClassPathResource, FileSystemResource, InputStreamResource and UrlResource.
+- These are used to load a resource from a locations.
+- ClassPathResource is one of its implementations for loading a resource from the class path. 
 
-A bean factory also takes part in the life cycle of a bean, making calls to custom initialization and destruction methods, if those methods are defined.
-
-Beans are “lazily” loaded into bean factories, meaning that while the bean factory will immediately load the bean definitions, the beans themselves will not 
-	be instantiated until they are needed.
-When getBean() is called on the bean factory, the factory instantiates the bean and set the bean’s properties using DI.
-
-Resource is only an interface, while ClassPathResource is one of its implementations for loading a resource from the class path. Other implementations of the 
-	Resource interface, such as  FileSystemResource, InputStreamResource, and UrlResource, are used to load a resource from other locations
-
-Next, you can use the following statement to instantiate a bean factory by passing in a Resource object with the configuration file loaded:
-	BeanFactory factory = new XmlBeanFactory(resource);
-
-Among the many implementations of ApplicationContext are three that are commonly used:
+#### ApplicationContext - 3 that are commonly used:
+- **ClassPathXmlApplicationContext** — Loads a context definition from an XML file located in the class path, treating context definition files as class path resources. E.g `ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");`
+- **FileSystemXmlApplicationContext** — Loads a context definition from an XML file in the file system.
+- **XmlWebApplicationContext** — Loads context definitions from an XML file contained within a web application.
 	
-	- ClassPathXmlApplicationContext — Loads a context definition from an XML file located in the class path, treating context definition files as class path resources.
- 	
- 	- FileSystemXmlApplicationContext — Loads a context definition from an XML file in the file system.
-	
-	- XmlWebApplicationContext — Loads context definitions from an XML file contained within a web application.
-	
-The ClassPathXmlApplicationContext implementation builds an application context by loading an XML configuration file from the class path.
-	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-
-Multiple configuration files can be added either by importing them in one configuration file or by using an overloaded constructor of ClassPathXmlApplicationContext.
-    ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"bean1.xml", "bean2.xml"});
+- Multiple configuration files can be added either by importing them in one configuration file or by using an overloaded constructor of ClassPathXmlApplicationContext.
+    `ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"bean1.xml", "bean2.xml"});`
 
 
 Bean LifeCycle:
