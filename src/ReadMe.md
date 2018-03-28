@@ -32,7 +32,8 @@ This can lead to highly coupled and hard-to-test code.
 	- org.springframework.context. ApplicationContext
 
 > **_Difference between BeanFactory and ApplicationContext:_**
-> - **BeanFactory** is responsible for the life cycle of bean, i.e creation and disposal of bean. Can be instantiated as `BeanFactory factory = new XmlBeanFactory(resource);`
+> - **BeanFactory** is responsible for the life cycle of bean, i.e creation and disposal of bean. Can be instantiated as 
+`BeanFactory factory = new XmlBeanFactory(resource);`
 > - **ApplicationContext** is the sub class of bean factory, it provides the additional functionality such as : 
     - the ability to resolve textual messages from a properties file, including support for internationalization of those messages
     - the ability to publish application events to beans that are registered as event listeners
@@ -53,10 +54,11 @@ This can lead to highly coupled and hard-to-test code.
 - ClassPathResource is one of its implementations for loading a resource from the class path. 
 
 #### ApplicationContext - 3 that are commonly used:
-- **ClassPathXmlApplicationContext** — Loads a context definition from an XML file located in the class path, treating context definition files as class path resources. E.g `ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");`
+- **ClassPathXmlApplicationContext** — Loads a context definition from an XML file located in the class path, treating context definition files as class path resources. 
+`ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");`
 - **FileSystemXmlApplicationContext** — Loads a context definition from an XML file in the file system.
 - **XmlWebApplicationContext** — Loads context definitions from an XML file contained within a web application.
-- Multiple configuration files can be added either by importing them in one configuration file or by using an overloaded constructor of ClassPathXmlApplicationContext.
+- **Multiple configuration** files can be added either by importing them in one configuration file or by using an overloaded constructor of ClassPathXmlApplicationContext.
     `ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"bean1.xml", "bean2.xml"});`
 
 #### Bean LifeCycle:
