@@ -32,12 +32,12 @@ This can lead to highly coupled and hard-to-test code.
 	- org.springframework.context. ApplicationContext
 
 > **_Difference between BeanFactory and ApplicationContext:_**
-	> - **BeanFactory** is responsible for the life cycle of bean, i.e creation and disposal of bean. Can be instantiated as 
+> - **BeanFactory** is responsible for the life cycle of bean, i.e creation and disposal of bean. Can be instantiated as 
 	`BeanFactory factory = new XmlBeanFactory(resource);`
-	> - **ApplicationContext** is the sub class of bean factory, it provides the additional functionality such as : 
-		> - the ability to resolve textual messages from a properties file, including support for internationalization of those messages
-		> - the ability to publish application events to beans that are registered as event listeners
-		> - Provide generic way to load file resource, such as images
+> - **ApplicationContext** is the sub class of bean factory, it provides the additional functionality such as : 
+> 	- the ability to resolve textual messages from a properties file, including support for internationalization of those messages
+> 	- the ability to publish application events to beans that are registered as event listeners
+> 	- Provide generic way to load file resource, such as images
 - Because of additional functionality, ApplicationContext is preferred over BeanFactory in most of the application.
 - BeanFactory are used in circumstance where resources are scare, like mobile devices.
 - Bean Factory is the  implementation of the factory design pattern.
