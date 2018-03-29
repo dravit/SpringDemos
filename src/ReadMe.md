@@ -83,53 +83,37 @@ This can lead to highly coupled and hard-to-test code.
 - **Setter based injection** : realized by calling setters on your beans. Provide setter methods for each property. Use <property> tag in xml to configure value.
 - **Constructor based injection** : realized by invoking a constructor with a number of arguments. Write constructor with the properties as arguments. Use <constructor-arg> tag in xml to configure value.
 - **Factory method** : Objects are injected from the factory method.
-	
-To configure auto wiring by annotation, you need to add a bean post processor {AutoWiredAnnotationBeanPostProcessor}.
 
-If you are using Application Context in place of bean factory, you need to add below line in your configuration file:
-    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+#### Annotations : 
+- **Auto wiring by annotation** : you need to add a bean post processor {AutoWiredAnnotationBeanPostProcessor} in configuration file.
+    `<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />`
+- Alternatively, you can simply include the ** `<context:annotation-config>` ** element in your bean configuration file, and an AutowiredAnnotationBeanPostProcessor instance will automatically get registered.
 
-Alternatively, you can simply include the <context:annotation-config> element in your bean configuration file,
-    and an AutowiredAnnotationBeanPostProcessor instance will automatically get registered.
-
-
-By default, all the properties with @Autowired are required. If a dependency is not found,
-    an exception{org.springframework.beans.factory.UnsatisfiedDependencyException} is thrown. This is good in some circumstance
-	when you want to ensure that all dependent objects have provided their dependencies.
-
-Making autowiring error safe using required=false :
-
-If you want a certain property to be optional, you will have to set the required attribute of @Autowired(required=false) annotation to false.
-If you want to apply optional autowiring at global level i.e. for all properties in all beans; use below configuration setting.
-<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor">
+#### @Autowired annotation : 
+- By default, all the properties with @Autowired are required. 
+- If a dependency is not found, an exception{org.springframework.beans.factory.UnsatisfiedDependencyException} is thrown. This is good in some circumstance when you want to ensure that all dependent objects have provided their dependencies.
+- Making autowiring error safe using required=false
+- If you want a certain property to be optional, you will have to set the required attribute of `@Autowired(required=false)` annotation to false.
+- If you want to apply optional autowiring at global level i.e. for all properties in all beans; use below configuration setting : 
+`<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor">
     <property name="requiredParameterValue" value="false" />
-</bean>
-
-Excluding a bean from being available for autowiring :
-
-    By default, autowiring scan and matches all bean definitions in scope.
-    If you want to exclude some bean definitions so that they can not be injected through autowiring mode,
-    you can do this using ‘autowire-candidate’ set to false.
-
-    -   Using ‘autowire-candidate‘ as false totally exclude a bean from being an autowire candidate.
-        <bean id="finance"      class="DepartmentBean" autowire-candidate="false">
+</bean>`
+- Excluding a bean from being available for autowiring :
+> - By default, autowiring scan and matches all bean definitions in scope.
+> - If you want to exclude some bean definitions so that they can not be injected through autowiring mode, you can do this using 'autowire-candidate' set to false.
+> - Using 'autowire-candidate' as false totally exclude a bean from being an autowire candidate.
+        `<bean id="finance"      class="DepartmentBean" autowire-candidate="false">
                 <property name="name" value="Finance" />
-        </bean>
-
-    - Another option is to limit autowire candidates based on pattern-matching against bean names.
-        The top-level element accepts one or more patterns within its ‘default-autowire-candidates‘ attribute.
-        For example, to limit autowire candidate status to any bean whose name ends with ‘Impl’, provide a value of ‘*Impl’.
-        To provide multiple patterns, define them in a comma-separated list.
-        <beans default-autowire-candidates="*Impl,*Dao">
-
-    Note that an explicit value of ‘true’ or ‘false’ for a bean definition’s ‘autowire-candidate’ attribute always takes
+        </bean>`
+> - Another option is to limit autowire candidates based on pattern-matching against bean names.
+> - The top-level element accepts one or more patterns within its 'default-autowire-candidates' attribute.
+> - For example, to limit autowire candidate status to any bean whose name ends with 'Impl', provide a value of `*Impl`.
+> - To provide multiple patterns, define them in a comma-separated list.
+        `<beans default-autowire-candidates="*Impl,*Dao">`
+> - Note that an explicit value of 'true' or 'false' for a bean definition's 'autowire-candidate' attribute always takes
     precedence, and for such beans, the pattern matching rules will not apply.
-
-In addition to the setter method, the @Autowired annotation can also be applied to a constructor. Then Spring will attempt to find a bean with the compatible 
-	type for each of the constructor arguments.
-
-The @Autowired annotation can also be applied to a field, even if it is not declared as public. In this way, you can omit the need of declaring a setter 
-	method or a constructor for this field.
+- **@Autowired** annotation can also be applied to a constructor. Then Spring will attempt to find a bean with the compatible type for each of the constructor arguments.
+- **@Autowired** annotation can also be applied to a **field**, even if it is not declared as public. In this way, you can omit the need of declaring a setter method or a constructor for this field.
 	
 If you want to auto-wire bean properties by name, you can annotate a setter method, a constructor, or a field with the JSR-250 @Resource annotation. 
 	By default, Spring will attempt to find a bean with the same name as this property and if you want to change name by which it will find you can specify by
