@@ -95,9 +95,11 @@ This can lead to highly coupled and hard-to-test code.
 - Making autowiring error safe using required=false
 - If you want a certain property to be optional, you will have to set the required attribute of `@Autowired(required=false)` annotation to false.
 - If you want to apply optional autowiring at global level i.e. for all properties in all beans; use below configuration setting : 
-`<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor">
+```
+<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor">
     <property name="requiredParameterValue" value="false" />
-</bean>`
+</bean>
+```
 - Excluding a bean from being available for autowiring :
 > - By default, autowiring scan and matches all bean definitions in scope.
 > - If you want to exclude some bean definitions so that they can not be injected through autowiring mode, you can do this using 'autowire-candidate' set to false.
