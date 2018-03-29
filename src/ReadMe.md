@@ -114,15 +114,19 @@ This can lead to highly coupled and hard-to-test code.
     precedence, and for such beans, the pattern matching rules will not apply.
 - **@Autowired** annotation can also be applied to a constructor. Then Spring will attempt to find a bean with the compatible type for each of the constructor arguments.
 - **@Autowired** annotation can also be applied to a **field**, even if it is not declared as public. In this way, you can omit the need of declaring a setter method or a constructor for this field.
-	
-If you want to auto-wire bean properties by name, you can annotate a setter method, a constructor, or a field with the JSR-250 @Resource annotation. 
-	By default, Spring will attempt to find a bean with the same name as this property and if you want to change name by which it will find you can specify by
-	@javax.annotation.Resource	==>> This one is default
-	@javax.annotation.Resource(name="some bean name here")	==>> This one will map with the mentioned bean name.
 
-Wiring hardcoded values using @Value
+#### @Resource : 
+- If you want to auto-wire bean properties by name, you can annotate a setter method, a constructor, or a field with the JSR-250 @Resource annotation. 
+- By default, Spring will attempt to find a bean with the same name as this property and if you want to change name by which it will find you can specify by
+	`@javax.annotation.Resource	==>> This one is default
+	@javax.annotation.Resource(name="some bean name here")	==>> This one will map with the mentioned bean name.`
+
+#### @Value : 
+- Wiring hardcoded values using @Value
+```
     @Value("India")
     private String country;
+```
 
 Automatic Discovering Beans : 
 	
